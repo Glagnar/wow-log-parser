@@ -14,11 +14,15 @@ var Config = struct {
 	OutputFile string
 	CheckOnly  bool
 	LogLevel   string
+	Split      bool
+	Sort       bool
 }{
 	"input.txt",
 	"output.txt",
 	true,
 	"info",
+	false,
+	false,
 }
 
 var validLogLevel = map[string]bool{
@@ -58,6 +62,22 @@ func init() {
 		flag.StringVar(&Config.LogLevel, "loglevel", v, mesg)
 	} else {
 		flag.StringVar(&Config.LogLevel, "loglevel", Config.LogLevel, mesg)
+	}
+
+	mesg = "Split output on mulitple RAIDS: SPLIT"
+	if v := os.Getenv("SPLIT"); v != "" {
+		b, _ := strconv.ParseBool(v)
+		flag.BoolVar(&Config.Split, "split", b, mesg)
+	} else {
+		flag.BoolVar(&Config.Split, "split", Config.Split, mesg)
+	}
+
+	mesg = "Sort data on timestamp: SORT"
+	if v := os.Getenv("SORT"); v != "" {
+		b, _ := strconv.ParseBool(v)
+		flag.BoolVar(&Config.Sort, "sort", b, mesg)
+	} else {
+		flag.BoolVar(&Config.Sort, "sort", Config.Sort, mesg)
 	}
 
 	flag.Parse()
